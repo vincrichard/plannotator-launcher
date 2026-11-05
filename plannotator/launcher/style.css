@@ -1,0 +1,34 @@
+:root { color-scheme: light; font-family: system-ui, sans-serif; background: #fdf6e3; color: #586e75; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 620px; margin: auto; padding: max(32px, env(safe-area-inset-top)) 20px max(32px, env(safe-area-inset-bottom)); }
+header { display: flex; gap: 16px; align-items: center; }
+h1 { margin: 0; font-size: 32px; letter-spacing: -.04em; color: #002b36; }
+.eyebrow { color: #586e75; font-size: 11px; letter-spacing: .15em; margin: 0 0 4px; }
+section { margin-top: 24px; border-top: 1px solid #93a1a1; padding: 16px 0; }
+h2 { font-size: 17px; margin: 0; color: #073642; }
+button { font: inherit; border-radius: 8px; min-height: 44px; cursor: pointer; border: 0; background: #2aa198; color: #002b36; padding: 12px 18px; font-weight: 650; }
+:focus-visible { outline: 3px solid #b58900; outline-offset: 4px; }
+#message { color: #dc322f; font-size: 14px; margin-bottom: 0; overflow-wrap: anywhere; }
+#message:empty { display: none; }
+.empty { padding: 20px 0; }
+ul { padding: 0; margin: 16px 0 0; list-style: none; }
+footer { margin-top: 16px; }
+button:disabled { opacity: .6; cursor: wait; }
+.section-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+#count { font-size: 13px; color: #586e75; margin-left: 4px; }
+#refresh { padding: 8px 12px; background: #eee8d5; color: #073642; font-size: 13px; }
+li { border-bottom: 1px solid #93a1a1; }
+li a { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 10px 0; color: #073642; text-decoration: none; }
+li a:hover { background: #eee8d5; }
+.review-details { flex: 1; min-width: 0; }
+.review-details strong { display: block; font-size: 15px; font-weight: 600; overflow-wrap: anywhere; }
+li small { display: block; margin-top: 3px; color: #586e75; font: 11px ui-monospace, monospace; }
+.open-label { flex-shrink: 0; font-size: 13px; font-weight: 600; }
+.empty, footer { font-size: 13px; color: #586e75; line-height: 1.6; }
+.review-actions { padding: 0 0 8px; display: grid; gap: 8px; }
+.review-actions button { justify-self: start; font-size: 12px; min-height: 32px; padding: 6px 10px; border-radius: 6px; }
+@media (pointer: coarse) { .review-actions button { min-height: 40px; } }
+.review-actions summary { cursor: pointer; padding: 8px 0; }
+.review-actions textarea { width: 100%; min-height: 110px; padding: 10px; font: 13px system-ui; }
+.review-actions small { margin: 6px 0; }

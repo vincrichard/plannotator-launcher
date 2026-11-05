@@ -1,0 +1,6 @@
+<!-- Adapted from Plannotator CLASSIC_FAVICON_SVG; see THIRD-PARTY-NOTICES.md. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#fdf6e3"/>
+  <rect x="12" y="28" width="40" height="14" rx="3" fill="#b58900" opacity="0.35"/>
+  <text x="32" y="46" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="42" fill="#002b36">P</text>
+</svg>

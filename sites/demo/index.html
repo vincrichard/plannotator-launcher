@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Hello · Agent sites</title>
+<link rel="stylesheet" href="style.css">
+<main>
+  <span class="status"><span aria-hidden="true">●</span> Connected to your server</span>
+  <div class="illustration" aria-hidden="true">↗</div>
+  <p class="eyebrow">A LITTLE HELLO FROM LOCALHOST</p>
+  <h1>Your page.<br>Your browser.</h1>
+  <p class="intro">If you can see this, your website link opened successfully. Give the button a tap to try it out.</p>
+  <button id="tap" type="button">Tap to test <span aria-hidden="true">→</span></button>
+  <p id="result" role="status">Ready when you are.</p>
+  <dl>
+    <div><dt>Opened in</dt><dd id="browser">Your browser</dd></div>
+    <div><dt>Website</dt><dd id="address"></dd></div>
+  </dl>
+  <footer>A small website, sent through your SSH tunnel.</footer>
+</main>
+<script src="app.js"></script>
+</html>

@@ -1,0 +1,16 @@
+node_modules/
+__pycache__/
+*.py[cod]
+test-artifacts/
+playwright-report/
+test-results/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+plannotator/mobile-tooling-review.md
+# Runtime review records and private links never belong in this repository.
+state/
+records/
+routes/

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fdf6e3">
+  <meta name="apple-mobile-web-app-title" content="Reviews">
+  <title>Reviews</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/launcher/icon.svg?v=solarized-light-p" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/launcher/icon-192.png?v=solarized-light-p">
+  <link rel="stylesheet" href="/launcher/style.css?v=review-lifecycle">
+  <script src="/launcher/app.js?v=review-lifecycle" defer></script>
+</head>
+<body>
+  <main>
+    <header><img src="/launcher/icon.svg?v=solarized-light-p" width="56" height="56" alt=""><div><p class="eyebrow">PLANNOTATOR</p><h1>Reviews</h1></div></header>
+    <section aria-labelledby="running-heading">
+      <div class="section-heading"><h2 id="running-heading">Reviews <span id="count"></span></h2><button id="refresh" type="button">Refresh</button></div>
+      <p id="message" role="status" aria-live="polite">Loading reviews…</p>
+      <ul id="reviews" aria-label="Reviews"></ul>
+      <p id="empty" class="empty" hidden>No saved or running reviews. New reviews will appear here automatically.</p>
+    </section>
+    <footer>Updates every 5 seconds. Keep your SSH connection running.</footer>
+    <noscript>Enable JavaScript to view reviews.</noscript>
+  </main>
+</body>
+</html>
