@@ -13,7 +13,7 @@ class DurableReviewTest(unittest.TestCase):
 import os,sys,json
 from pathlib import Path
 from http.server import HTTPServer,BaseHTTPRequestHandler
-if '--version' in sys.argv: print('plannotator 0.28.20-references.30');sys.exit()
+if '--version' in sys.argv: print('plannotator 0.28.20-references.31');sys.exit()
 class H(BaseHTTPRequestHandler):
  def log_message(self,*a):pass
  def do_GET(self):
@@ -362,7 +362,7 @@ else: raise RuntimeError('Unexpected Herdr command')
   self.assertEqual(self.runcli('--result',record['id']).returncode,1)
   self.assertIn('invalid output',(self.root/'records'/record['id']/'stdout.log').read_text())
   fake=self.root/'bin/plannotator'
-  fake.write_text("#!/usr/bin/env python3\nimport sys\nprint('plannotator 0.28.20-references.30' if '--version' in sys.argv else 'startup failed')\nsys.exit(0 if '--version' in sys.argv else 1)\n")
+  fake.write_text("#!/usr/bin/env python3\nimport sys\nprint('plannotator 0.28.20-references.31' if '--version' in sys.argv else 'startup failed')\nsys.exit(0 if '--version' in sys.argv else 1)\n")
   launched=self.runcli('--detach');self.assertEqual(launched.returncode,1)
   self.assertEqual(json.loads(launched.stdout)['status'],'failed')
  def test_detach_explicit_cancel_and_failed_exit_are_not_approval(self):
