@@ -12,7 +12,7 @@ Make application changes in the fork and launcher changes here, then commit and 
 
 ## Current feature baseline
 
-Application base: **v0.28.20**, patched build **0.28.20-references.29**, source commit [`e50d97c`](https://github.com/vincrichard/plannotator/commit/e50d97c1311f29b2fff57dfa6122bbbb5d5adf31).
+Application base: **v0.28.20**, patched build **0.28.20-references.30**, source commit [`67a6864`](https://github.com/vincrichard/plannotator/commit/67a68648f8362430dd042ee0cca4582a126db374).
 
 Implemented in the fork:
 

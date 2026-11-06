@@ -1,6 +1,6 @@
 # Review launcher and lifecycle
 
-This directory contains the proxy and durable launcher for the [Plannotator fork](https://github.com/vincrichard/plannotator/tree/commentable-references). The current binary pin is **0.28.20-references.29**. Installation, component ownership and baseline features are documented in the [repository README](../README.md).
+This directory contains the proxy and durable launcher for the [Plannotator fork](https://github.com/vincrichard/plannotator/tree/commentable-references). The current binary pin is **0.28.20-references.30**. Installation, component ownership and baseline features are documented in the [repository README](../README.md).
 
 ## Commands
 
