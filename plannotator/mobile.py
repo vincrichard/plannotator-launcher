@@ -54,7 +54,7 @@ def main():
     if args == ['--help']:
         print('Usage: plannotator-mobile [--title "Review name"] [Plannotator review arguments]\n'
               '--title names the review in the Reviews launcher; defaults to the working directory name.\n'
-              'Runs Plannotator 0.28.20-references.38 with a unique route on 127.0.0.1:19433, separate from Herdr localhost links.\n'
+              'Runs Plannotator 0.28.20-references.39 with a unique route on 127.0.0.1:19433, separate from Herdr localhost links.\n'
               'Links go to stderr; the final Plannotator decision JSON goes to stdout.\n'
               'The review runs in a detached supervisor. Ctrl-C stops waiting, not the review.\n'
               'Use --detach for a launch receipt; --wait ID or --result ID retrieves durable feedback.\n'
@@ -115,8 +115,8 @@ def main():
     if args == ['--proxy-status']:
         print(f'Proxy ready: http://127.0.0.1:{PORT} (loopback; reachable over SSH)')
         return 0
-    if subprocess.check_output(['plannotator', '--version'], text=True).strip() != 'plannotator 0.28.20-references.38':
-        raise RuntimeError('This adapter is verified for Plannotator 0.28.20-references.38. Re-test before using a different version.')
+    if subprocess.check_output(['plannotator', '--version'], text=True).strip() != 'plannotator 0.28.20-references.39':
+        raise RuntimeError('This adapter is verified for Plannotator 0.28.20-references.39. Re-test before using a different version.')
     if '--tailscale' in args:
         raise RuntimeError('Use the SSH proxy link for mobile reviews')
     record = durable.launch(args, title, STATE, PORT, options.notify_command, generate_guide=options.generate_guide)

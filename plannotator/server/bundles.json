@@ -20,7 +20,8 @@
     "0.28.20-references.35",
     "0.28.20-references.36",
     "0.28.20-references.37",
-    "0.28.20-references.38"
+    "0.28.20-references.38",
+    "0.28.20-references.39"
   ],
   "script": [
     "e936159c4a4a714670e4a58a2ef9874cb4e5d0bbdc9900d92b667816048f00c3",
@@ -42,7 +43,8 @@
     "13484bdfd0363686c7f8e19381aac87d7ca0afc4a202e5e561815f2a1488cb9d",
     "d470246ebefa0db1cc0c6d7ee1117647bcaae725e77406874ac98460570119cb",
     "4b3aba4d7537c51d35d18b2ce1abba4426b6a5fe5456658edb45a1ef58c41010",
-    "870a1e0eed9624bcd0ee347e8f7afb7a920daa5c8355962a6e8e411f08177766"
+    "870a1e0eed9624bcd0ee347e8f7afb7a920daa5c8355962a6e8e411f08177766",
+    "fbca5ea763b5ec0040ba42275ac8bce31b5b15aa18323b6896ff15dcb65b2cbe"
   ],
   "style": [
     "44efc41b0ac91c2a294bc25f8989ec3977b2e07d21cc4010bd6262fa84e5138c",
