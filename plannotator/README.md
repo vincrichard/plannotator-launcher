@@ -1,6 +1,6 @@
 # Review launcher and lifecycle
 
-This directory contains the proxy and durable launcher for the [Plannotator fork](https://github.com/vincrichard/plannotator/tree/commentable-references). The current binary pin is **0.28.20-references.36**. Installation, component ownership and baseline features are documented in the [repository README](../README.md).
+This directory contains the proxy and durable launcher for the [Plannotator fork](https://github.com/vincrichard/plannotator/tree/commentable-references). The current binary pin is **0.28.20-references.37**. Installation, component ownership and baseline features are documented in the [repository README](../README.md).
 
 ## Commands
 
@@ -57,3 +57,5 @@ node --test --test-timeout=10000 test-sessions.mjs test-proxy.mjs test-route-ada
 ```
 
 The fake CLI lifecycle suite uses disposable processes and state. Browser checks require the matching patched binary and Playwright (`npm ci`, `npx playwright install chromium`); `npm run test:auth` exercises access and launcher behavior. The broad `npm test` also uses the shared gateway with disposable review fixtures. Do not stop unrelated reviews as test cleanup.
+
+Guided-review prompt overrides in the shared data directory’s `review_prompts/` folder are linked into each durable review. Editing `guided-review.md`, `block-repair.md`, or `json-repair.md` affects the next corresponding generation/repair request on .37 and later; a vault or Git checkout can hold the files. Existing per-review overrides are retained. See the [application prompt documentation](https://github.com/vincrichard/plannotator/blob/commentable-references/docs/review-prompts.md).

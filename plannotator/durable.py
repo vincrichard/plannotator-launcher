@@ -206,6 +206,9 @@ def supervise(path):
             print(f'Could not share viewed-file progress; using this review only: {error}', file=sys.stderr)
         if (original / 'config.json').exists() and not (data / 'config.json').exists():
             shutil.copyfile(original / 'config.json', data / 'config.json')
+        prompts = data / 'review_prompts'
+        if original.resolve() != data.resolve() and not prompts.exists() and not prompts.is_symlink():
+            prompts.symlink_to((original / 'review_prompts').resolve(), target_is_directory=True)
         env = {**os.environ, 'PLANNOTATOR_REMOTE': '0', 'PLANNOTATOR_PORT': '0', 'PLANNOTATOR_SKIP_BROWSER_OPEN': '1', 'PLANNOTATOR_READY_FILE': str(path / 'ready.json'), 'PLANNOTATOR_DATA_DIR': str(data)}
         env.pop('PLANNOTATOR_URL_HOST', None)
         if launch.get('lifecycle'):
