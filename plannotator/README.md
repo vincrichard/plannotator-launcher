@@ -27,6 +27,8 @@ plannotator-mobile --cancel ID
 
 `--result` exits 0 only for submitted feedback, 2 while pending or suspended, and 1 for failed/cancelled/interrupted or unknown reviews. Cancelling a waiter leaves its review running. `--cancel` explicitly stops the review without submitting feedback and retains existing saved files. `--ack` marks a completion notification read; it does not delete feedback.
 
+Annotated feedback returned by `--result`, `--wait`, or an attached launch includes `follow_up` instructions. For recorded Claude/Codex sessions, `capture_before` and `capture_after` are shell commands targeting the original review checkout and a stable feedback-round ID. The agent runs them around requested edits (or synchronization into a separate review checkout), then verifies **Last turn changes** before sharing the next review. This workflow does not require turn hooks. Re-reading feedback never runs capture or changes the saved reviewer message. Approvals/dismissals add no follow-up prompt; question-only annotations instruct the agent to skip capture. Unsupported or missing identities receive an explicit limitation instead of guessed commands. Existing reviews receive the instructions on their next result retrieval; raw `feedback.json` remains unchanged.
+
 Guide generation is opt-in via `--generate-guide`, only when explicitly requested. Inline questions run in a read-only fork of the explicitly identified launching Codex, Claude Code or OpenCode session. Never infer a parent by selecting the latest agent conversation. Herdr integration is optional; `PLANNOTATOR_REVIEW_NOTIFY=0` disables automatic delivery.
 
 ## Resumable review lifecycle

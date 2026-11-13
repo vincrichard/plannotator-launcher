@@ -86,6 +86,42 @@ s.serve_forever()
   self.assertFalse(route.exists());self.assertEqual(len(json.loads(self.runcli('--notifications').stdout)),1)
   self.assertEqual(self.runcli('--ack',sid).returncode,0);self.assertEqual(json.loads(self.runcli('--notifications').stdout),[])
   self.assertEqual((self.root/'records'/sid/'feedback.json').stat().st_mode & 0o077,0)
+ def saved_feedback(self, decision='annotated', env=None):
+  (self.root/'records').mkdir(mode=0o700,exist_ok=True)
+  sid='f'*32;path=self.root/'records'/sid;path.mkdir(mode=0o700,exist_ok=True)
+  cwd=str(self.root/"review's $(touch SHOULD_NOT_EXIST)")
+  durable.atomic(path/'session.json',{'id':sid,'status':'completed','cwd':cwd})
+  durable.atomic(path/'launch.json',{'parent_env':env or {}})
+  durable.atomic(path/'feedback.json',{'decision':decision,'message':'Reviewer text stays exact.'})
+  return sid,path,cwd
+ def test_feedback_result_prompts_capture_in_original_worktree_and_wait_matches(self):
+  session='11111111-1111-4111-8111-111111111111'
+  sid,path,cwd=self.saved_feedback(env={'CLAUDE_CODE_SESSION_ID':session})
+  before=(path/'feedback.json').read_bytes()
+  response=self.runcli('--result',sid);self.assertEqual(response.returncode,0,response.stderr)
+  result=json.loads(response.stdout)
+  self.assertEqual(result['message'],'Reviewer text stays exact.')
+  follow=result['follow_up'];self.assertIn('before editing',follow['instructions']);self.assertIn('Last turn changes',follow['instructions'])
+  self.assertEqual(result,json.loads(self.runcli('--wait',sid).stdout))
+  self.assertEqual((path/'feedback.json').read_bytes(),before)
+  fake=self.root/'bin/plannotator'
+  fake.write_text('#!/usr/bin/env python3\nimport sys,json\nassert sys.argv[1:]==["turn-snapshot"]\nprint(json.dumps(json.load(sys.stdin)))\n');fake.chmod(0o755)
+  for key,event in [('capture_before','UserPromptSubmit'),('capture_after','Stop')]:
+   captured=subprocess.run(['bash','-c',follow[key]],env=self.env,cwd=self.root,capture_output=True,text=True,check=True)
+   self.assertEqual(json.loads(captured.stdout),{'hook_event_name':event,'cwd':cwd,'session_id':session,'turn_id':'review-feedback:'+sid})
+  self.assertFalse((self.root/'SHOULD_NOT_EXIST').exists())
+ def test_approval_and_dismissal_do_not_request_follow_up_capture(self):
+  for decision in ['approved','dismissed']:
+   sid,path,cwd=self.saved_feedback(decision)
+   self.assertEqual(json.loads(self.runcli('--result',sid).stdout),json.loads((path/'feedback.json').read_text()))
+ def test_feedback_capture_requires_supported_recorded_identity(self):
+  session='11111111-1111-4111-8111-111111111111'
+  for env,supported in [({},False),({'OPENCODE_SESSION_ID':'ses_fixture'},False),({'PLANNOTATOR_DISCUSSION_PROVIDER':'opencode','PLANNOTATOR_DISCUSSION_SESSION_ID':session},False),({'CODEX_THREAD_ID':session},True),({'PLANNOTATOR_SESSION_TAG':'claude-code:'+session},True),({'PLANNOTATOR_DISCUSSION_PROVIDER':'claude','PLANNOTATOR_DISCUSSION_SESSION_ID':session},True),({'CLAUDE_CODE_SESSION_ID':'invalid'},False)]:
+   with self.subTest(env=env):
+    sid,path,cwd=self.saved_feedback(env=env)
+    follow=json.loads(self.runcli('--result',sid).stdout)['follow_up']
+    self.assertEqual('capture_before' in follow,supported)
+    if not supported:self.assertIn('unavailable',follow['instructions'])
  def test_viewed_progress_is_shared_but_drafts_stay_session_local(self):
   first=json.loads(self.runcli('--detach').stdout)
   a=self.root/'records'/first['id']/'data'

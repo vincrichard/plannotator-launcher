@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import re
 import secrets
+import shlex
 import shutil
 import signal
 import subprocess
@@ -94,10 +95,46 @@ def wait(path):
 def result(path):
     record = status(path)
     if record['status'] == 'completed':
-        print((path / 'feedback.json').read_text().strip())
+        feedback = json.loads((path / 'feedback.json').read_text())
+        if feedback.get('decision') == 'annotated':
+            feedback['follow_up'] = feedback_follow_up(path, record)
+        print(json.dumps(feedback))
         return 0
     print(json.dumps(record))
     return 2 if record['status'] not in TERMINAL else 1
+
+
+def feedback_follow_up(path, record):
+    """Describe capture at retrieval time, including reviews started by older supervisors."""
+    instructions = (
+        'If the submitted feedback requests code changes, capture_before before editing, applying, or syncing those changes. '
+        'Use the original review checkout, comparison base, and launching session for the next review. '
+        'For a separate review checkout, capture it before syncing the authorized edits; keep unrelated work intact. '
+        'Apply and verify the requested changes, sync the review checkout if needed, then run capture_after before launching the next review. '
+        'These explicit captures do not require installed turn hooks. Reuse the same turn_id on retries; retain the original baseline when resuming partial work. '
+        'If edits already started without a baseline, report last-turn capture unavailable instead of capturing a misleading before-state. '
+        'Before sharing the next review, check /api/diff gitContext.diffOptions for Last turn changes and verify it contains only this feedback round. '
+        'Question-only feedback needs no capture or new review.'
+    )
+    try:
+        launch = json.loads((path / 'launch.json').read_text())
+        env = launch.get('parent_env') or {}
+    except (OSError, ValueError):
+        env = {}
+    session = env.get('PLANNOTATOR_DISCUSSION_SESSION_ID')
+    if session is None:
+        tag = env.get('PLANNOTATOR_SESSION_TAG', '')
+        session = tag.removeprefix('claude-code:') if tag.startswith('claude-code:') else env.get('CLAUDE_CODE_SESSION_ID') or env.get('CODEX_THREAD_ID')
+    unsupported = env.get('PLANNOTATOR_DISCUSSION_PROVIDER') == 'opencode' or (env.get('OPENCODE_SESSION_ID') and not env.get('PLANNOTATOR_DISCUSSION_PROVIDER'))
+    cwd = record.get('cwd')
+    if unsupported or not isinstance(session, str) or not re.fullmatch(r'[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}', session) or not isinstance(cwd, str) or not Path(cwd).is_absolute():
+        return {'instructions': 'Last-turn capture is unavailable: this review has no supported recorded session/checkout identity. '
+                'Apply only authorized feedback and explain that limitation; do not invent an identity or promise Last turn changes.'}
+    commands = {}
+    for key, event in [('capture_before', 'UserPromptSubmit'), ('capture_after', 'Stop')]:
+        payload = {'hook_event_name': event, 'cwd': cwd, 'session_id': session, 'turn_id': 'review-feedback:' + record['id']}
+        commands[key] = "printf '%s\\n' " + shlex.quote(json.dumps(payload)) + ' | plannotator turn-snapshot'
+    return {'instructions': instructions, **commands}
 
 
 def agent_target(env=None, notifications=True, ready_only=False):
@@ -147,7 +184,7 @@ def notify(path, record, command, target=None):
     # Save feedback availability even when the originating agent cannot be reached.
     atomic(path / 'notification.json', event)
     if command is None and record['status'] == 'completed' and target and agent_target() == target:
-        message = f"Feedback is ready for review {record['id']}. Retrieve it with plannotator-mobile --result {record['id']} and read the submitted decision and message before acting."
+        message = f"Feedback is ready for review {record['id']}. Retrieve it with plannotator-mobile --result {record['id']} and read the submitted decision, message, and follow_up instructions before acting."
         command = ['herdr', 'agent', 'prompt', target['pane_id'], message]
     if command:
         command = [arg.replace('{review_id}', record['id']).replace('{result_file}', str(path / 'feedback.json')) for arg in command]
